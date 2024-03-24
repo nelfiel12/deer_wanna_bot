@@ -5,8 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:deer_wanna_bot"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="579" Width="854" Loaded="onLoaded">
     <Grid>
-        
+        <Button Content="refresh process list" Click="onList" Width="220" HorizontalAlignment="Right" Margin="0,10,624,492"/>
+        <ListBox x:Name="ListBoxProcess" SelectionChanged="onListBoxSelectionChanged" Grid.RowSpan="2" Width="220" Margin="10,102,624,181" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding MainWindowTitle}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Image x:Name="Image" HorizontalAlignment="Left" Height="100" Margin="733,71,0,0" VerticalAlignment="Top" Width="100"/>
+        <Button x:Name="ButtonFind" Content="open capture window" HorizontalAlignment="Left" Margin="706,39,0,0" VerticalAlignment="Top" Click="onClickFind"/>
+        <Label Content="copy image to clipboard first" HorizontalAlignment="Left" Margin="532,33,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>
