@@ -81,9 +81,14 @@
     <Compile Include="CaptureWindow.xaml.cs">
       <DependentUpon>CaptureWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Data\CaptureData.cs" />
+    <Compile Include="InsertWindow.xaml.cs">
+      <DependentUpon>InsertWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TestWindow.xaml.cs">
       <DependentUpon>TestWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Util\Util.cs" />
     <Compile Include="WindowsRuntimeHelpers\CaptureHelper.cs" />
     <Compile Include="WindowsRuntimeHelpers\CompositionHelper.cs" />
     <Compile Include="WindowsRuntimeHelpers\CompositionHost.cs" />
@@ -93,6 +98,10 @@
     <Compile Include="WindowsRuntimeHelpers\CoreMessagingHelper.cs" />
     <Compile Include="WindowsRuntimeHelpers\Direct3D11Helper.cs" />
     <Page Include="CaptureWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="InsertWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -181,6 +190,9 @@
     </PackageReference>
     <PackageReference Include="SharpDX.DXGI">
       <Version>4.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="Win32Interop.User32">
+      <Version>1.0.1</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

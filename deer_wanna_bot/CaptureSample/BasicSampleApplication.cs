@@ -16,11 +16,11 @@ namespace deer_wanna_bot.CaptureSample
     public class BasicSampleApplication : IDisposable
     {
         private Compositor compositor;
-        private ContainerVisual root;
+        public ContainerVisual root;
 
         private ContainerVisual drawingVisual;
 
-        private SpriteVisual content;
+        public SpriteVisual content;
         private CompositionSurfaceBrush brush;
 
         private IDirect3DDevice device;
@@ -33,30 +33,31 @@ namespace deer_wanna_bot.CaptureSample
 
             // Setup the root.
             root = compositor.CreateContainerVisual();
-            root.RelativeSizeAdjustment = Vector2.One;
-
+            
             // Setup the content.
             brush = compositor.CreateSurfaceBrush();
-            brush.HorizontalAlignmentRatio = 0.5f;
-            brush.VerticalAlignmentRatio = 0.5f;
-            brush.Stretch = CompositionStretch.Uniform;
+            //brush.HorizontalAlignmentRatio = 0.5f;
+            //brush.VerticalAlignmentRatio = 0.5f;
+            brush.Stretch = CompositionStretch.None;
+
 
             var shadow = compositor.CreateDropShadow();
             shadow.Mask = brush;
-
             content = compositor.CreateSpriteVisual();
-            content.AnchorPoint = new Vector2(0.5f);
-            content.RelativeOffsetAdjustment = new Vector3(0.5f, 0.5f, 0);
-            content.RelativeSizeAdjustment = Vector2.One;
-            content.Size = new Vector2(-80, -80);
             content.Brush = brush;
             content.Shadow = shadow;
             root.Children.InsertAtTop(content);
 
             drawingVisual = compositor.CreateContainerVisual();
-            drawingVisual.RelativeSizeAdjustment = Vector2.One;
+            root.Children.InsertAtTop(drawingVisual);            
 
-            root.Children.InsertAtTop(drawingVisual);
+            var visual = compositor.CreateSpriteVisual();
+            visual.Size = new Vector2(100, 100);
+            visual.Scale = new Vector3(1, 1, 1);
+
+            visual.Brush = compositor.CreateColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0));
+            visual.Offset = new Vector3(0, 0, 0);
+            drawingVisual.Children.InsertAtTop(visual);
         }
 
         public Visual Visual => root;

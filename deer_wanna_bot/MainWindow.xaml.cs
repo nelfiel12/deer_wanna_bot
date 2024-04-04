@@ -10,12 +10,16 @@ using System.Windows.Media;
 using Windows.Foundation.Metadata;
 using Windows.UI.Composition;
 
+using OpenCvSharp;
+using OpenCvSharp.XFeatures2D;
+using System.Runtime.InteropServices;
+
 namespace deer_wanna_bot
 {
     /// <summary>
     /// MainWindow.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : System.Windows.Window
     {
         private IntPtr hWnd;
         private TestWindow testWindow;
@@ -91,6 +95,54 @@ namespace deer_wanna_bot
             }
         }
 
+        void featureMatching(OpenCvSharp.Mat src, OpenCvSharp.Mat temp)
+        {
+            OpenCvSharp.Cv2.CvtColor(src, src, OpenCvSharp.ColorConversionCodes.BGRA2GRAY);
+            OpenCvSharp.Cv2.CvtColor(temp, temp, OpenCvSharp.ColorConversionCodes.BGR2GRAY);
+
+            int minHessian = 400;
+            
+            SURF detector = SURF.Create(minHessian);
+
+            Mat descriptors1 = new Mat();
+            Mat descriptors2 = new Mat();
+
+            KeyPoint[] keyPoints1;
+            KeyPoint[] keyPoints2;
+            detector.DetectAndCompute(temp, null, out keyPoints1, descriptors1);
+            detector.DetectAndCompute(src, null, out keyPoints2, descriptors2);
+            
+            DescriptorMatcher matcher = DescriptorMatcher.Create("FlannBased");
+
+            DMatch[][] ret = matcher.KnnMatch(descriptors1, descriptors2, 2);
+
+            List<DMatch> good = new List<DMatch>();
+
+            float ratio_thresh = 0.7f;
+            for (int i=0; i<ret.Length; i++)
+            {
+                if (ret[i][0].Distance < ratio_thresh * ret[i][1].Distance)
+                {
+                    good.Add(ret[i][0]);
+                }
+            }
+
+            Mat img_matches = new Mat();
+
+            Cv2.DrawMatches(temp, keyPoints1, src, keyPoints2, good, img_matches, Scalar.All(-1), Scalar.All(1), null, DrawMatchesFlags.NotDrawSinglePoints);
+
+
+
+            if (captureWindow == null)
+            {
+                captureWindow = new CaptureWindow();
+                captureWindow.Show();
+            }
+
+            captureWindow.setMat(img_matches);
+
+        }
+
         void templateMatching(OpenCvSharp.Mat src,  OpenCvSharp.Mat temp)
         {
             OpenCvSharp.Mat ori = src.Clone();
@@ -153,7 +205,7 @@ namespace deer_wanna_bot
                             break;
                     }
 
-                    OpenCvSharp.Cv2.Rectangle(ori, matchLoc, new OpenCvSharp.Point(matchLoc.X + temp.Cols, matchLoc.Y + temp.Rows), OpenCvSharp.Scalar.Red, 10);
+                    OpenCvSharp.Cv2.Rectangle(ori, matchLoc, new OpenCvSharp.Point(matchLoc.X + temp.Cols, matchLoc.Y + temp.Rows), OpenCvSharp.Scalar.Red, 1);
 
                 }
             }
@@ -187,6 +239,7 @@ namespace deer_wanna_bot
             }
 
             templateMatching(m, testMat);
+            //featureMatching(m, testMat);
         }
     }
 }

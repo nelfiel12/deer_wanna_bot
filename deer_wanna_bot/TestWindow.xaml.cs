@@ -90,7 +90,25 @@ namespace deer_wanna_bot
         {
             if(root != null)
             {
-                root.Size = new Vector2((float)e.NewSize.Width, (float)e.NewSize.Height);
+                Win32Interop.Methods.User32.GetWindowRect(hwnd, out var wrect);
+
+                Win32Interop.Structs.POINT pt = new Win32Interop.Structs.POINT
+                {
+                    x = wrect.left,
+                    y = wrect.top
+                };
+                Win32Interop.Methods.User32.ScreenToClient(hwnd, ref pt);
+                wrect.right = pt.x + (wrect.right - wrect.left);
+                wrect.bottom = pt.y + (wrect.bottom - wrect.top);
+                wrect.left = pt.x;
+                wrect.top = pt.y;
+
+                Win32Interop.Structs.RECT crect;
+                Win32Interop.Methods.User32.GetClientRect(hwnd, out crect);
+
+                //root.Size = new Vector2((float)e.NewSize.Width, (float)e.NewSize.Height);                
+                sample.content.Offset = new Vector3(wrect.left, wrect.top, 0);
+                sample.content.Size = new Vector2((float)e.NewSize.Width, (float)e.NewSize.Height);
             }
         }
     }

@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:deer_wanna_bot"
         xmlns:helpers="clr-namespace:deer_wanna_bot.WindowsRuntimeHelpers"
         mc:Ignorable="d"
-        Title="TestWindow" Height="530" Width="923" Loaded="onLoaded" Unloaded="onUnloaded" SizeChanged="onSizeChanged">
+        Title="TestWindow" Height="530" Width="923" Loaded="onLoaded" Unloaded="onUnloaded" SizeChanged="onSizeChanged" ResizeMode="NoResize">
     <Grid>
+        
     </Grid>
 </Window>
