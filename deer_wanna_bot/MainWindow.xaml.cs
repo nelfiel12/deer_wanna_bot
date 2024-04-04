@@ -13,6 +13,9 @@ using Windows.UI.Composition;
 using OpenCvSharp;
 using OpenCvSharp.XFeatures2D;
 using System.Runtime.InteropServices;
+using OpenCvSharp.WpfExtensions;
+using deer_wanna_bot.Data;
+using System.Text.Json;
 
 namespace deer_wanna_bot
 {
@@ -31,6 +34,18 @@ namespace deer_wanna_bot
         public MainWindow()
         {
             InitializeComponent();
+
+            OpenCvSharp.TemplateMatchModes[] modes = {
+                OpenCvSharp.TemplateMatchModes.CCoeff,
+                OpenCvSharp.TemplateMatchModes.CCoeffNormed,
+                OpenCvSharp.TemplateMatchModes.SqDiff,
+                OpenCvSharp.TemplateMatchModes.SqDiffNormed,
+                OpenCvSharp.TemplateMatchModes.CCorr,
+                OpenCvSharp.TemplateMatchModes.CCorrNormed,
+            };
+
+            ComboBoxMode.ItemsSource = modes;
+            ComboBoxMode.SelectedIndex = 0;
 
             Windows.ApplicationModel.DataTransfer.Clipboard.ContentChanged += (sender, args) =>
                 {
@@ -224,7 +239,10 @@ namespace deer_wanna_bot
         private void onClickFind(object sender, RoutedEventArgs e)
         {
             OpenCvSharp.Mat m = testWindow.getMat();
-            OpenCvSharp.Mat testMat = OpenCvSharp.WpfExtensions.BitmapSourceConverter.ToMat(Clipboard.GetImage());
+
+            System.Windows.Media.Imaging.BitmapSource bitmapSource = Clipboard.GetImage();
+
+            Mat testMat = bitmapSource?.ToMat();
 
             if (m == null || m.Empty())
             {
@@ -240,6 +258,33 @@ namespace deer_wanna_bot
 
             templateMatching(m, testMat);
             //featureMatching(m, testMat);
+        }
+
+        InsertWindow m_insertWindow;
+        private void onClickInserWindow(object sender, RoutedEventArgs e)
+        {
+            if(m_insertWindow == null)
+            {
+                m_insertWindow = new InsertWindow();
+            }
+            m_insertWindow.SetScreenMat(testWindow.getMat());
+            m_insertWindow.Show();
+        }
+
+        private void onComboBoxModeSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            //MessageBox.Show("TODO");
+        }
+
+        private void onClickCheckCurScreen(object sender, RoutedEventArgs e)
+        {
+            //MessageBox.Show("TODO");
+
+            //var s = new Screen("main");
+
+            //byte[] tests = JsonSerializer.SerializeToUtf8Bytes(s);
+
+            //Console.WriteLine(s.ToJsonString());
         }
     }
 }

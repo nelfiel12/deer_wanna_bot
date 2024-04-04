@@ -50,7 +50,8 @@ namespace deer_wanna_bot
             //root.RelativeSizeAdjustment = new Vector2(0.5f, 0.5f);// Vector2.One;
             //root.RelativeOffsetAdjustment = new Vector3(0.5f, 0.5f, 0);
             //root.RelativeOffsetAdjustment = new Vector3(0, 0, 0);
-            root.Size = new Vector2(width, height);
+            root.RelativeSizeAdjustment = new Vector2(1, 1);
+            //root.Size = new Vector2(width, height);
             //root.Offset = new Vector3(-(width / 2), -1, 0);
             target.Root = root;
 
@@ -64,10 +65,39 @@ namespace deer_wanna_bot
             sample.StopCapture();
             try
             {
+                Win32Interop.Methods.User32.GetWindowRect(hwnd, out var wrect);
+                Win32Interop.Structs.POINT pt = new Win32Interop.Structs.POINT
+                {
+                    x = wrect.left,
+                    y = wrect.top
+                };
+                Win32Interop.Methods.User32.ScreenToClient(hwnd, ref pt);
+                wrect.right = pt.x + (wrect.right - wrect.left);
+                wrect.bottom = pt.y + (wrect.bottom - wrect.top);
+                wrect.left = pt.x;
+                wrect.top = pt.y;
+
+                Win32Interop.Structs.RECT crect;
+                Win32Interop.Methods.User32.GetClientRect(hwnd, out crect);
+
+                float wf = crect.right - crect.left;
+                float hf = crect.bottom - crect.top;
+
+
+                //this.Width = 1024;
+                //this.Height = this.Width / (wf / hf);
+
                 GraphicsCaptureItem item = CaptureHelper.CreateItemForWindow(hwnd);
                 if (item != null)
                 {
+                    this.Width = wrect.right - wrect.left;
+                    this.Height = wrect.bottom - wrect.top;
+                    //setTargetSize((int)wf, (int)hf);
+                    
                     sample.StartCaptureFromItem(item);
+
+                    sample.content.Offset = new Vector3(wrect.left, wrect.top, 0);
+                    sample.content.Size = new Vector2(wf, hf);
                 }
             }
             catch(Exception ex)
@@ -90,25 +120,9 @@ namespace deer_wanna_bot
         {
             if(root != null)
             {
-                Win32Interop.Methods.User32.GetWindowRect(hwnd, out var wrect);
-
-                Win32Interop.Structs.POINT pt = new Win32Interop.Structs.POINT
-                {
-                    x = wrect.left,
-                    y = wrect.top
-                };
-                Win32Interop.Methods.User32.ScreenToClient(hwnd, ref pt);
-                wrect.right = pt.x + (wrect.right - wrect.left);
-                wrect.bottom = pt.y + (wrect.bottom - wrect.top);
-                wrect.left = pt.x;
-                wrect.top = pt.y;
-
-                Win32Interop.Structs.RECT crect;
-                Win32Interop.Methods.User32.GetClientRect(hwnd, out crect);
-
                 //root.Size = new Vector2((float)e.NewSize.Width, (float)e.NewSize.Height);                
-                sample.content.Offset = new Vector3(wrect.left, wrect.top, 0);
-                sample.content.Size = new Vector2((float)e.NewSize.Width, (float)e.NewSize.Height);
+                //sample.content.Offset = new Vector3(wrect.left, wrect.top, 0);
+                //sample.content.Size = new Vector2((float)e.NewSize.Width, (float)e.NewSize.Height);
             }
         }
     }

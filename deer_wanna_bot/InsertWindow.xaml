@@ -4,18 +4,59 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:deer_wanna_bot"
+        xmlns:helper="clr-namespace:deer_wanna_bot.WindowsRuntimeHelpers"
         mc:Ignorable="d"
         Title="InsertWindow" Height="450" Width="800">
+    <Window.Resources>
+        <Style x:Key="ImageBorder" TargetType="Border" >
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True" >
+                    <Setter Property="BorderBrush">
+                        <Setter.Value>
+                            <SolidColorBrush Color="Red" />
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="Black" />
+        </Style>
+    </Window.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Image Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
-        <Image Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" >
+            <Button x:Name="ButtonSave" Content="Insert" Click="Click_Save" />
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="0" >
+            <Button Content="Template image" Width="auto" Height="auto" Click="TemplateButton_Click" />
+            <Border x:Name="TemplateBorder" Style="{StaticResource ImageBorder}" Focusable="True">
+                <Image x:Name="TemplateImage" Width="100" Height="100" />
+            </Border>
+            <Button Content="Mask image" Width="auto" Height="auto" Click="MaskButton_Click" />
+            <Border x:Name="MaskBorder" Style="{StaticResource ImageBorder}" Focusable="True"  >
+                <Image x:Name="MaskImage" Width="100" Height="100" >
+                </Image>
+            </Border>
+        </StackPanel>
+        <Grid Grid.Row="1" Grid.Column="1" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label Content="Select matching area" Grid.Row="0" />
+            <Grid Grid.Row="1">
+                <!--<helper:CompositionHostControl x:Name="Host"/>-->
+                <Image x:Name="ImageSrc" />
+                <Canvas x:Name="Canvas"  Background="Transparent" MouseMove="Canvas_MouseMove" MouseDown="Canvas_MouseDown" MouseUp="Canvas_MouseUp"  />
+            </Grid>
+        </Grid>
+        
     </Grid>
 </Window>

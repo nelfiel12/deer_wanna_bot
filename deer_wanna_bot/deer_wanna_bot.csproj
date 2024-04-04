@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{DB7AA9FE-5E84-4231-B4BA-FAB8BD073BBE}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>deer_wanna_bot</RootNamespace>
     <AssemblyName>deer_wanna_bot</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
@@ -52,12 +52,16 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="System.Text.Json, Version=7.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -81,7 +85,10 @@
     <Compile Include="CaptureWindow.xaml.cs">
       <DependentUpon>CaptureWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Data\Action.cs" />
+    <Compile Include="Data\BaseData.cs" />
     <Compile Include="Data\CaptureData.cs" />
+    <Compile Include="Data\Screen.cs" />
     <Compile Include="InsertWindow.xaml.cs">
       <DependentUpon>InsertWindow.xaml</DependentUpon>
     </Compile>

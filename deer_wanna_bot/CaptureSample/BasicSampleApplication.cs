@@ -24,7 +24,7 @@ namespace deer_wanna_bot.CaptureSample
         private CompositionSurfaceBrush brush;
 
         private IDirect3DDevice device;
-        private BasicCapture capture;
+        public BasicCapture capture;
 
         public BasicSampleApplication(Compositor c)
         {
@@ -33,19 +33,13 @@ namespace deer_wanna_bot.CaptureSample
 
             // Setup the root.
             root = compositor.CreateContainerVisual();
-            
+
             // Setup the content.
             brush = compositor.CreateSurfaceBrush();
-            //brush.HorizontalAlignmentRatio = 0.5f;
-            //brush.VerticalAlignmentRatio = 0.5f;
             brush.Stretch = CompositionStretch.None;
 
-
-            var shadow = compositor.CreateDropShadow();
-            shadow.Mask = brush;
             content = compositor.CreateSpriteVisual();
             content.Brush = brush;
-            content.Shadow = shadow;
             root.Children.InsertAtTop(content);
 
             drawingVisual = compositor.CreateContainerVisual();
